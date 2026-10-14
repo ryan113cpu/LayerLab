@@ -7,3 +7,4 @@ I wanted to make a homepage that looks good and shows people what my business is
 I made this project using HTML and tried to make it look good while keeping it simple and easy to use.
 
 Thanks for checking out LayerLab!
+(I could'nt fix my webpage so please download my file then run it)
