@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f7fc">
+  <meta property="og:title" content="LayerLab — A small 3D printing project">
+  <meta property="og:description" content="A small maker project about turning ideas into printable things, with a tiny game tucked inside.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 40 40%27%3E%3Crect width=%2740%27 height=%2740%27 rx=%279%27 fill=%27%231d1c29%27/%3E%3Cpath d=%27M7 13 20 6l13 7-13 7L7 13Zm0 7 13 7 13-7M7 27l13 7 13-7%27 fill=%27none%27 stroke=%27%23ff796f%27 stroke-width=%272%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+  <meta name="description" content="LayerLab is a small 3D-printing studio for useful parts, one-off objects, early prototypes and ideas that are still taking shape.">
+  <title>LayerLab — A small 3D printing studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Nunito:wght@400;500;600;700;800;900;1000&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --page: #f4f7fc;
+  --paper: #ffffff;
+  --blue: #4169df;
+  --blue-light: #e8edff;
+  --coral: #f07868;
+  --mint: #58b8a5;
+  --ink: #26334a;
+  --muted: #657087;
+  --line: #d9e0ed;
+  --purple: #8874da;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 85px; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: "Nunito", Arial, sans-serif; font-size: 16px; line-height: 1.65; }
+body.menu-open { overflow: hidden; }
+::selection { background: #c9d5ff; color: var(--ink); }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { color: inherit; }
+img { display: block; width: 100%; }
+svg { display: block; }
+p, h1, h2, h3 { margin-top: 0; }
+p:last-child { margin-bottom: 0; }
+:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+.container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+.skip-link { position: fixed; top: 10px; left: 10px; z-index: 100; padding: 10px 14px; background: var(--blue); color: white; transform: translateY(-150%); }
+.skip-link:focus { transform: translateY(0); }
+
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(244, 247, 252, .96); border-bottom: 2px solid var(--line); }
+.navbar { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; }
+.brand-mark { display: grid; place-items: center; width: 36px; height: 36px; color: var(--blue); background: #e3eaff; border: 2px solid var(--blue); border-radius: 10px 7px 11px 8px; transform: rotate(-3deg); }
+.brand-mark svg { width: 24px; height: 24px; }
+.brand-name { font-size: 23px; font-weight: 900; letter-spacing: -1.2px; }
+.brand-name span { color: var(--coral); }
+.nav-links { display: flex; align-items: center; gap: 21px; }
+.nav-links > a:not(.button) { color: var(--muted); font-size: 13px; font-weight: 800; }
+.nav-links > a:not(.button):hover, .nav-links > a.active { color: var(--blue); }
+.menu-toggle { display: none; width: 42px; height: 42px; place-items: center; border: 2px solid var(--line); border-radius: 9px; background: var(--paper); cursor: pointer; }
+.menu-toggle svg { width: 22px; height: 22px; }
+
+.button { display: inline-flex; min-height: 47px; align-items: center; justify-content: center; gap: 9px; padding: 11px 17px; border: 2px solid var(--blue); border-radius: 10px 8px 11px 8px; background: var(--blue); color: white; font-size: 13px; font-weight: 900; cursor: pointer; transition: transform .15s ease, background .15s ease; }
+.button:hover { transform: translateY(-2px) rotate(-.5deg); background: #3155c5; }
+.button svg { width: 16px; height: 16px; }
+.button-secondary { background: var(--paper); color: var(--blue); }
+.button-secondary:hover { background: var(--blue-light); color: var(--blue); }
+.text-link { display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-size: 13px; font-weight: 900; }
+.text-link svg { width: 16px; height: 16px; }
+.text-link:hover { color: var(--coral); }
+
+.hero { padding: 74px 0 65px; background-image: radial-gradient(#d3dced 1px, transparent 1px); background-size: 18px 18px; }
+.hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 48px; }
+.hero-copy { padding: 28px 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-size: 12px; font-weight: 900; }
+.eyebrow::before { content: "✦"; color: var(--coral); font-size: 16px; }
+.hero-copy h1 { margin: 17px 0; font-size: clamp(47px, 6.6vw, 76px); font-weight: 1000; line-height: 1.03; letter-spacing: -3.5px; }
+.hero-copy h1 span { display: block; color: var(--blue); }
+.hero-copy > p { max-width: 510px; margin-bottom: 25px; color: var(--muted); font-size: 16px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; color: var(--muted); font-size: 11px; font-weight: 800; }
+.meta-item { display: inline-flex; align-items: center; gap: 6px; }
+.meta-item svg { width: 15px; height: 15px; color: var(--coral); }
+.hero-visual { position: relative; }
+.hero-image-wrap { position: relative; min-height: 430px; overflow: hidden; border: 4px solid white; border-radius: 17px 13px 19px 12px; background: #cbd5e9; box-shadow: 7px 7px 0 #d9e0ef; transform: rotate(1deg); }
+.hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.image-corner { position: absolute; top: 13px; left: 13px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 2px solid white; border-radius: 8px; background: rgba(255,255,255,.92); color: var(--ink); font-size: 10px; font-weight: 900; }
+.image-corner span { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); }
+.hero-image-caption { position: absolute; right: 12px; bottom: 12px; left: 12px; display: flex; align-items: end; justify-content: space-between; gap: 10px; padding: 13px; border: 2px solid white; border-radius: 10px; background: rgba(255,255,255,.94); color: var(--ink); }
+.hero-image-caption strong { display: block; font-size: 16px; font-weight: 1000; }
+.hero-image-caption span { color: var(--muted); font-size: 11px; }
+.caption-index { flex-shrink: 0; padding: 7px; border-radius: 8px; background: var(--blue-light); color: var(--blue); font-size: 11px; font-weight: 900; }
+.floating-note { position: absolute; right: -18px; bottom: 93px; width: 155px; padding: 13px; border: 2px solid var(--ink); border-radius: 9px 12px 8px 12px; background: #fff1ee; box-shadow: 4px 4px 0 var(--coral); transform: rotate(3deg); }
+.floating-note-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 7px; color: var(--muted); font-size: 10px; font-weight: 900; }
+.floating-note-top svg { width: 16px; height: 16px; color: var(--coral); }
+.floating-note strong { display: block; font-size: 14px; line-height: 1.4; }
+.accent-text { color: var(--coral); }
+.floating-note p { margin-top: 5px; color: var(--muted); font-size: 10px; }
+.hero-orbit { position: absolute; bottom: -22px; left: -20px; z-index: -1; width: 80px; height: 80px; border: 3px dashed var(--mint); border-radius: 50%; }
+
+.trust-strip { background: white; border-top: 2px solid var(--line); border-bottom: 2px solid var(--line); }
+.trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.trust-item { display: flex; min-height: 88px; align-items: center; justify-content: center; gap: 10px; padding: 14px; border-right: 1px solid var(--line); }
+.trust-item:last-child { border: 0; }
+.trust-item svg { width: 22px; height: 22px; flex-shrink: 0; color: var(--blue); }
+.trust-item:nth-child(2) svg { color: var(--coral); }
+.trust-item:nth-child(3) svg { color: var(--mint); }
+.trust-item strong { display: block; font-size: 12px; font-weight: 1000; }
+.trust-item span { display: block; color: var(--muted); font-size: 10px; }
+
+.section { padding: 82px 0; }
+.section-alt { background: #eaf0fb; border-top: 2px solid var(--line); border-bottom: 2px solid var(--line); }
+.section-heading { max-width: 720px; margin-bottom: 35px; }
+.section-heading h2, .maker-copy h2, .mini-game-copy h2 { margin: 10px 0 13px; font-size: clamp(34px, 4.6vw, 52px); font-weight: 1000; line-height: 1.08; letter-spacing: -2px; }
+.section-heading p, .maker-copy > p, .mini-game-copy > p { max-width: 630px; color: var(--muted); font-size: 14px; }
+.work-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; }
+.work-heading .section-heading { margin-bottom: 28px; }
+.work-heading .text-link { margin-bottom: 42px; flex-shrink: 0; }
+.project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 23px; }
+.project-card { position: relative; display: flex; flex-direction: column; overflow: hidden; min-height: 0; border: 2px solid white; border-radius: 14px; background: var(--paper); box-shadow: 3px 4px 0 var(--line); transition: transform .18s ease, box-shadow .18s ease; }
+.project-card:nth-child(2) { transform: rotate(.5deg); }
+.project-card:nth-child(3) { transform: rotate(-.5deg); }
+.project-card:hover { transform: translateY(-4px) rotate(0); box-shadow: 5px 6px 0 #cbd5e8; }
+.project-card > img { position: relative; z-index: 0; width: 100%; height: 240px; object-fit: cover; }
+.project-card::after { display: none; }
+.project-topline { position: absolute; z-index: 1; top: 12px; right: 12px; left: 12px; display: flex; justify-content: space-between; gap: 8px; }
+.project-tag { padding: 6px 9px; border: 2px solid white; border-radius: 7px; background: white; color: var(--ink); font-size: 10px; font-weight: 1000; }
+.project-arrow { display: grid; width: 34px; height: 34px; place-items: center; border: 2px solid white; border-radius: 50%; background: white; color: var(--blue); }
+.project-arrow svg { width: 15px; height: 15px; }
+.project-content { position: relative; right: auto; bottom: auto; left: auto; padding: 19px 20px 21px; }
+.project-content h3 { margin-bottom: 5px; font-size: 22px; font-weight: 1000; letter-spacing: -.6px; }
+.project-content p { color: var(--muted); font-size: 13px; }
+
+.maker-layout { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 65px; }
+.maker-paper { position: relative; padding: 22px 24px 28px; border: 2px solid #d3dcea; border-radius: 3px 14px 5px 12px; background: #fff; box-shadow: 7px 7px 0 #dce4f1; transform: rotate(-1deg); }
+.paper-topline { display: flex; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 2px dashed #dbe2f0; color: var(--muted); font-size: 10px; font-weight: 1000; }
+.paper-doodle { display: grid; min-height: 220px; place-items: center; color: var(--blue); }
+.paper-doodle svg { width: 100%; max-width: 300px; }
+.handwritten { margin: 0 0 10px; color: var(--coral); font-family: "Caveat", cursive; font-size: 29px; font-weight: 700; text-align: center; }
+.paper-note { max-width: 245px; margin: 0 auto; padding: 10px; border-left: 4px solid var(--mint); background: #effaf7; color: var(--ink); font-size: 12px; text-align: center; }
+.paper-sticker { position: absolute; top: 63px; right: 14px; display: grid; width: 66px; height: 66px; place-items: center; border-radius: 50%; background: var(--coral); color: white; font-size: 12px; font-weight: 1000; line-height: 1.2; text-align: center; transform: rotate(9deg); }
+.maker-copy h2 { margin: 12px 0; }
+.maker-copy > p { margin: 13px 0; }
+.maker-facts { margin: 24px 0; }
+.maker-facts > div { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.maker-fact-number { display: grid; width: 30px; height: 30px; flex-shrink: 0; place-items: center; border-radius: 9px; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 1000; }
+.maker-facts strong { display: block; font-size: 13px; }
+.maker-facts p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+
+.mini-game-section { background: #f8f4ff; border-top: 2px solid #e0d8f4; border-bottom: 2px solid #e0d8f4; }
+.mini-game-layout { display: grid; grid-template-columns: .75fr 1.25fr; align-items: start; gap: 32px; }
+.mini-game-copy h2 { font-size: clamp(34px, 4vw, 47px); }
+.game-howto { margin: 22px 0; }
+.game-howto-item { display: flex; align-items: start; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #d9d0ef; }
+.game-howto-item > span { display: grid; width: 26px; height: 26px; flex-shrink: 0; place-items: center; border-radius: 8px; background: white; color: var(--purple); font-size: 10px; font-weight: 1000; }
+.game-howto-item p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+.prototype-stamp { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px dashed #b9acd9; border-radius: 7px; color: var(--purple); font-size: 11px; font-weight: 900; }
+.prototype-stamp span { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); }
+.game-message { min-height: 50px; margin: 14px 0; color: var(--muted); font-size: 12px; }
+.game-copy-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.keyboard-note { color: var(--muted); font-size: 10px; }
+kbd { padding: 2px 5px; border: 1px solid #c9c0df; border-radius: 4px; background: white; color: var(--ink); font-size: 10px; }
+.mini-game-card { overflow: hidden; border: 3px solid #c4b7e8; border-radius: 15px; background: white; box-shadow: 6px 6px 0 #ded6f3; }
+.game-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; background: #eae4ff; border-bottom: 2px solid #d5c9f4; }
+.game-brand { display: flex; align-items: center; gap: 8px; color: #5645a1; font-size: 12px; font-weight: 1000; }
+.game-brand-mark { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 9px; background: var(--purple); color: white; font-size: 10px; }
+.game-build { color: #6d628e; font-size: 9px; font-weight: 1000; }
+.game-stage-track { display: flex; gap: 6px; padding: 10px 15px 0; }
+.game-stage-segment { height: 6px; flex: 1; border-radius: 10px; background: #e8e5ef; }
+.game-stage-segment.active { background: var(--blue); }
+.game-stage-segment.done { background: var(--mint); }
+.game-hud { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; padding: 12px 14px; }
+.game-stat { min-width: 0; padding: 9px 8px; border: 1px solid #e5e6f1; border-radius: 8px; background: #fafaff; }
+.game-stat > span { display: block; color: var(--muted); font-size: 9px; font-weight: 800; }
+.game-stat strong { display: block; margin-top: 2px; color: var(--ink); font-size: 19px; font-weight: 1000; line-height: 1.25; }
+.game-stat .game-stat-total { display: inline; color: var(--muted); font-size: 12px; }
+#game-time.time-low { color: var(--coral); }
+.game-targets-wrap { padding: 0 14px 12px; }
+.game-targets-label { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; color: var(--muted); font-size: 10px; font-weight: 900; }
+.game-targets-label span:last-child { color: var(--purple); }
+.game-targets { display: flex; flex-wrap: wrap; gap: 6px; }
+.target-chip { padding: 5px 8px; border: 1px solid #e0e1eb; border-radius: 7px; background: #f7f8fc; color: var(--muted); font-size: 10px; font-weight: 900; }
+.target-chip.current { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+.target-chip.done { border-color: #b4e4d8; background: #e6f8f2; color: #237e6e; text-decoration: line-through; }
+.game-world { position: relative; min-height: 290px; margin: 0 14px; overflow: hidden; border: 2px dashed #becdf2; border-radius: 10px; background-color: #f2f6ff; background-image: radial-gradient(#d6def4 1px, transparent 1px); background-size: 16px 16px; }
+.game-board-label, .game-hint { position: absolute; z-index: 1; top: 9px; padding: 5px 7px; border-radius: 5px; background: white; color: var(--muted); font-size: 9px; font-weight: 1000; }
+.game-board-label { left: 9px; }
+.game-hint { right: 9px; color: var(--blue); }
+.game-parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; padding: 42px 12px 13px; }
+.game-part { position: relative; display: flex; min-width: 0; min-height: 93px; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 11px 4px 7px; border: 2px solid #dce2f1; border-radius: 11px; background: white; color: var(--blue); cursor: pointer; transition: transform .12s ease, border-color .12s ease, background .12s ease; }
+.game-part:hover:not(:disabled) { transform: translateY(-3px) rotate(-1deg); border-color: var(--blue); }
+.game-part:disabled { cursor: default; opacity: .75; }
+.game-part svg { width: 36px; height: 36px; }
+.part-key { position: absolute; top: 5px; left: 6px; color: #9aa4bb; font-size: 9px; font-weight: 900; }
+.part-name { font-size: 10px; font-weight: 1000; }
+.part-gear { color: #4c73da; }
+.part-bolt { color: #f07868; }
+.part-spring { color: #289f91; }
+.part-nut { color: #8b73d6; }
+.part-cube { color: #d28a35; }
+.part-washer { color: #3f9cc4; }
+.part-wrench { color: #da6588; }
+.part-spool { color: #668b4c; }
+.game-part.collected { border-color: var(--mint); background: #e6f8f2; opacity: .6; }
+.game-part.wrong { animation: shake .22s linear 2; border-color: var(--coral); background: #fff0ed; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+.game-start-screen { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(245, 247, 255, .92); text-align: center; }
+.game-start-screen.hidden { display: none; }
+.game-start-content { max-width: 310px; }
+.game-start-icon { display: grid; width: 48px; height: 48px; margin: 0 auto 10px; place-items: center; border-radius: 13px; background: #e4eaff; color: var(--blue); }
+.game-start-icon svg { width: 27px; height: 27px; }
+.game-start-content h3 { margin: 0 0 6px; font-size: 22px; font-weight: 1000; }
+.game-start-content p { margin: 0 0 14px; color: var(--muted); font-size: 12px; }
+.game-timer-track { height: 8px; margin: 12px 14px 0; overflow: hidden; border-radius: 10px; background: #ececf5; }
+.game-timer-fill { display: block; width: 100%; height: 100%; border-radius: 10px; background: var(--mint); transition: width .1s linear; }
+.game-control-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; }
+.game-control-note { color: var(--muted); font-size: 10px; }
+.game-control-buttons { display: flex; gap: 7px; }
+.game-control-button { padding: 7px 9px; border: 1px solid #d8dcec; border-radius: 7px; background: #fff; color: var(--blue); font-size: 10px; font-weight: 1000; cursor: pointer; }
+.game-control-button:hover:not(:disabled) { background: var(--blue-light); }
+.game-control-button:disabled { opacity: .45; cursor: not-allowed; }
+.game-control-button span { margin-left: 4px; }
+.game-footer { display: flex; justify-content: space-between; gap: 9px; padding: 10px 14px; border-top: 1px solid #ececf5; background: #fafaff; color: var(--muted); font-size: 9px; }
+.game-footer strong { color: var(--ink); }
+.game-footnote { padding: 0 14px 12px; color: var(--muted); font-size: 10px; }
+
+.services-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 58px; align-items: start; }
+.services-intro .section-heading { margin-bottom: 22px; }
+.service-list { border-top: 2px solid var(--line); }
+.service-item { display: grid; grid-template-columns: 48px 1fr 22px; align-items: start; gap: 13px; padding: 21px 0; border-bottom: 1px solid var(--line); }
+.service-symbol { display: grid; width: 44px; height: 44px; place-items: center; border: 2px solid #d4defb; border-radius: 12px; background: var(--blue-light); color: var(--blue); }
+.service-item:nth-child(2) .service-symbol { border-color: #ffd9d3; background: #fff0ed; color: var(--coral); }
+.service-item:nth-child(3) .service-symbol { border-color: #c9e9e1; background: #eaf9f5; color: #268f7f; }
+.service-symbol svg { width: 22px; height: 22px; }
+.service-item h3 { margin: 0 0 5px; font-size: 17px; font-weight: 1000; }
+.service-item p { color: var(--muted); font-size: 12px; }
+.service-item > span { padding-top: 7px; color: #9aa4b7; font-size: 11px; font-weight: 900; }
+
+.materials-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.materials-header .section-heading { margin-bottom: 28px; }
+.material-note-pill { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 44px; padding: 8px 10px; border: 1px dashed #bdc9dd; border-radius: 8px; background: white; color: var(--muted); font-size: 10px; font-weight: 900; }
+.material-note-pill svg { width: 15px; height: 15px; color: var(--mint); }
+.material-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.material-card { min-height: 270px; padding: 22px; border: 2px solid white; border-radius: 13px; background: white; box-shadow: 3px 4px 0 var(--line); }
+.material-card:nth-child(2) { transform: rotate(.5deg); }
+.material-card:nth-child(3) { transform: rotate(-.5deg); }
+.material-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
+.material-code { color: #8792a8; font-size: 10px; font-weight: 900; }
+.material-icon { display: grid; width: 41px; height: 41px; place-items: center; border: 2px solid #d5defa; border-radius: 12px; background: var(--blue-light); color: var(--blue); }
+.material-card:nth-child(2) .material-icon { border-color: #ffd9d3; background: #fff0ed; color: var(--coral); }
+.material-card:nth-child(3) .material-icon { border-color: #c9e9e1; background: #eaf9f5; color: #268f7f; }
+.material-icon svg { width: 21px; height: 21px; }
+.material-card h3 { margin-bottom: 6px; font-size: 28px; font-weight: 1000; }
+.material-card p { color: var(--muted); font-size: 12px; }
+.material-tag { display: inline-block; margin-top: 9px; padding: 5px 8px; border-radius: 6px; background: #eef2ff; color: var(--blue); font-size: 10px; font-weight: 900; }
+.material-disclaimer { display: flex; align-items: start; gap: 10px; margin-top: 17px; padding: 14px; border: 1px solid #e3d8ce; border-radius: 10px; background: #fff8f4; color: var(--muted); font-size: 11px; }
+.material-disclaimer svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--coral); }
+
+.process-heading { max-width: 700px; }
+.process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
+.process-step { padding: 21px; border: 2px solid white; border-radius: 13px; background: white; box-shadow: 3px 4px 0 var(--line); }
+.process-step:nth-child(2) { transform: translateY(12px); }
+.step-number { display: inline-block; margin-bottom: 25px; padding: 5px 8px; border-radius: 6px; background: var(--blue-light); color: var(--blue); font-size: 11px; font-weight: 1000; }
+.process-step:nth-child(2) .step-number { background: #fff0ed; color: var(--coral); }
+.process-step:nth-child(3) .step-number { background: #e6f8f2; color: #238d7b; }
+.process-step h3 { margin-bottom: 7px; font-size: 20px; font-weight: 1000; }
+.process-step p { color: var(--muted); font-size: 12px; }
+.step-line { width: 32px; height: 4px; margin-top: 17px; border-radius: 5px; background: var(--blue); }
+.process-step:nth-child(2) .step-line { background: var(--coral); }
+.process-step:nth-child(3) .step-line { background: var(--mint); }
+
+.faq-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 48px; align-items: start; }
+.faq-list { border-top: 2px solid var(--line); }
+.faq-item { padding: 16px 0; border-bottom: 1px solid var(--line); }
+.faq-item summary { position: relative; padding-right: 30px; font-size: 14px; font-weight: 1000; cursor: pointer; list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { position: absolute; top: -2px; right: 2px; content: "+"; color: var(--blue); font-size: 23px; }
+.faq-item[open] summary::after { content: "−"; color: var(--coral); }
+.faq-item p { margin-top: 10px; color: var(--muted); font-size: 12px; }
+
+.cta-section { padding: 20px 0 85px; }
+.cta-panel { display: flex; align-items: end; justify-content: space-between; gap: 25px; padding: 34px; border: 2px solid var(--blue); border-radius: 15px 11px 17px 12px; background: #e8edff; box-shadow: 6px 6px 0 #cbd7ff; }
+.cta-panel h2 { max-width: 650px; margin: 9px 0; font-size: clamp(32px, 4.6vw, 49px); font-weight: 1000; line-height: 1.08; letter-spacing: -1.8px; }
+.cta-panel p { max-width: 510px; color: var(--muted); font-size: 13px; }
+.cta-panel .button { flex-shrink: 0; }
+
+.contact-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; align-items: start; }
+.contact-copy .section-heading h2 { font-size: clamp(34px, 4vw, 49px); }
+.contact-detail { display: flex; gap: 11px; padding: 15px 0; border-top: 1px solid var(--line); }
+.contact-detail svg { width: 19px; height: 19px; flex-shrink: 0; margin-top: 2px; color: var(--blue); }
+.contact-detail strong { display: block; font-size: 12px; font-weight: 1000; }
+.contact-detail span { display: block; color: var(--muted); font-size: 11px; }
+.contact-email-link:hover strong, .contact-email-link:hover span { color: var(--blue); }
+.quote-form { padding: 25px; border: 2px solid white; border-radius: 14px; background: white; box-shadow: 4px 5px 0 var(--line); }
+.form-topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; padding-bottom: 15px; border-bottom: 2px dashed var(--line); }
+.form-topline h3 { margin: 0; font-size: 20px; font-weight: 1000; }
+.form-topline span { color: var(--muted); font-size: 10px; font-weight: 900; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.form-group { min-width: 0; margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 1000; }
+.form-group label span { color: var(--muted); font-weight: 600; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; min-height: 44px; padding: 10px 11px; border: 2px solid #dfe5ef; border-radius: 8px; background: #fbfcff; color: var(--ink); font-size: 12px; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: #929bb0; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); outline: 2px solid #e1e8ff; }
+.form-group textarea { min-height: 115px; resize: vertical; }
+.quote-form .button { width: 100%; }
+.form-footnote { display: flex; align-items: start; gap: 7px; margin-top: 12px; color: var(--muted); font-size: 10px; }
+.form-footnote svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
+.form-status { display: none; margin-top: 12px; padding: 11px; border: 1px solid #b7dfd4; border-radius: 8px; background: #edfbf7; color: #247f70; font-size: 12px; }
+.form-status.visible { display: block; }
+.copy-draft-button { display: inline; padding: 0; border: 0; background: none; color: var(--blue); font-weight: 1000; text-decoration: underline; cursor: pointer; }
+
+.site-footer { padding-top: 25px; border-top: 2px solid var(--line); background: #eaf0fb; }
+.site-note { margin-bottom: 24px; padding: 13px 16px; border-left: 4px solid var(--coral); background: white; color: var(--muted); font-size: 11px; }
+.site-note strong { color: var(--ink); }
+.footer-main { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 28px; padding: 25px 0 30px; }
+.footer-about p { max-width: 290px; margin-top: 12px; color: var(--muted); font-size: 11px; }
+.footer-social { display: flex; gap: 8px; margin-top: 14px; }
+.social-link { display: grid; width: 33px; height: 33px; place-items: center; border: 2px solid #cbd5e8; border-radius: 9px; background: white; color: var(--blue); }
+.social-link:hover { border-color: var(--blue); }
+.social-link svg { width: 15px; height: 15px; }
+.footer-column h3 { margin-bottom: 10px; color: var(--blue); font-size: 12px; font-weight: 1000; }
+.footer-column a { display: block; width: fit-content; margin: 7px 0; color: var(--muted); font-size: 11px; }
+.footer-column a:hover { color: var(--coral); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 15px 0; border-top: 1px solid #d6deec; color: var(--muted); font-size: 10px; }
+.back-top { display: inline-flex; align-items: center; gap: 5px; color: var(--blue); font-weight: 900; }
+.back-top svg { width: 13px; height: 13px; }
+
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity .45s ease, transform .45s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: .06s; }
+.delay-2 { transition-delay: .12s; }
+.delay-3 { transition-delay: .18s; }
+
+@media (max-width: 900px) {
+  .nav-links { gap: 13px; }
+  .nav-links > a:not(.button) { font-size: 12px; }
+  .hero-grid { gap: 30px; }
+  .hero-copy h1 { font-size: clamp(44px, 6vw, 62px); letter-spacing: -2.6px; }
+  .hero-image-wrap { min-height: 380px; }
+  .floating-note { right: -8px; }
+  .maker-layout { gap: 36px; }
+  .mini-game-layout { grid-template-columns: 1fr; }
+  .mini-game-copy { max-width: 700px; }
+  .mini-game-card { max-width: 700px; width: 100%; }
+  .services-layout, .faq-layout, .contact-layout { gap: 32px; }
+  .footer-main { gap: 20px; }
+}
+
+@media (max-width: 720px) {
+  .container { width: calc(100% - 32px); }
+  .menu-toggle { display: grid; }
+  .nav-links { position: absolute; top: 74px; right: 0; left: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 12px 20px 20px; border-bottom: 2px solid var(--line); background: var(--page); }
+  .nav-links.open { display: flex; }
+  .nav-links > a:not(.button) { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .nav-links .button { margin-top: 12px; }
+  .hero { padding: 45px 0 55px; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-copy { padding: 0; }
+  .hero-copy h1 { max-width: 600px; font-size: clamp(48px, 11vw, 68px); }
+  .hero-visual { width: calc(100% - 8px); margin: 0 auto; }
+  .hero-image-wrap { min-height: 360px; }
+  .floating-note { right: -7px; bottom: 72px; }
+  .trust-grid { grid-template-columns: repeat(2, 1fr); }
+  .trust-item { min-height: 80px; justify-content: flex-start; padding: 13px 10px; }
+  .trust-item:nth-child(2) { border-right: 0; }
+  .trust-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .section { padding: 65px 0; }
+  .work-heading { display: block; }
+  .work-heading .text-link { margin: -10px 0 25px; }
+  .project-grid { gap: 14px; }
+  .project-card > img { height: 190px; }
+  .project-content { padding: 14px; }
+  .project-content h3 { font-size: 18px; }
+  .project-content p { font-size: 11px; }
+  .maker-layout { grid-template-columns: 1fr; gap: 35px; }
+  .maker-paper { width: min(100%, 420px); margin: 0 auto; }
+  .services-layout, .faq-layout, .contact-layout { grid-template-columns: 1fr; }
+  .materials-header { display: block; }
+  .materials-header .section-heading { margin-bottom: 12px; }
+  .material-note-pill { margin-bottom: 25px; }
+  .material-grid { grid-template-columns: 1fr; }
+  .material-card { min-height: 0; }
+  .material-card:nth-child(2), .material-card:nth-child(3) { transform: none; }
+  .material-top { margin-bottom: 14px; }
+  .process-grid { grid-template-columns: 1fr; }
+  .process-step:nth-child(2) { transform: none; }
+  .step-number { margin-bottom: 15px; }
+  .cta-section { padding: 5px 0 65px; }
+  .cta-panel { align-items: flex-start; flex-direction: column; padding: 24px; }
+  .cta-panel .button { width: 100%; }
+  .footer-main { grid-template-columns: repeat(2, 1fr); }
+  .footer-about { grid-column: 1 / -1; }
+}
+
+@media (max-width: 460px) {
+  .hero-actions { display: grid; grid-template-columns: 1fr; }
+  .hero-actions .button { width: 100%; }
+  .hero-meta { display: grid; gap: 8px; }
+  .hero-image-wrap { min-height: 310px; }
+  .floating-note { right: -4px; width: 140px; }
+  .project-grid { grid-template-columns: 1fr; }
+  .project-card > img { height: 220px; }
+  .service-item { grid-template-columns: 40px 1fr 18px; gap: 10px; }
+  .service-symbol { width: 38px; height: 38px; }
+  .game-hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .game-world { min-height: 320px; }
+  .game-parts { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; padding-inline: 7px; }
+  .game-part { min-height: 82px; padding-inline: 2px; }
+  .game-part svg { width: 29px; height: 29px; }
+  .part-name { font-size: 9px; }
+  .part-key { left: 4px; font-size: 8px; }
+  .game-control-row { align-items: flex-start; flex-direction: column; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .quote-form { padding: 18px 14px; }
+  .footer-bottom { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="site-header">
+    <div class="container navbar">
+      <a class="brand" href="#home" aria-label="LayerLab home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.1 12 3.8l8 4.3-8 4.3-8-4.3Z"/><path d="m4 12 8 4.3 8-4.3M4 15.9l8 4.3 8-4.3"/></svg>
+        </span>
+        <span class="brand-name">Layer<span>Lab.</span></span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <nav class="nav-links" id="nav-links" aria-label="Main navigation">
+        <a href="#home" class="active">Home</a>
+        <a href="#work">Things to make</a>
+        <a href="#about">About</a>
+        <a href="#mini-lab">Tiny game</a>
+        <a href="#services">What we do</a>
+        <a href="#materials">Materials</a>
+        <a href="#contact" class="button">Start a project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">A small 3D-printing project</span>
+          <h1>Got an idea?<span>Let’s make it.</span></h1>
+          <p>Maybe it’s a part that doesn’t exist, a gift you can’t find, or just a sketch you want to test. LayerLab is about figuring out how to turn that idea into something you can actually hold.</p>
+          <div class="hero-actions">
+            <a href="#contact" class="button">Bring your idea <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+            <a href="#work" class="button button-secondary">Explore the work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <div class="hero-meta">
+            <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Start with a rough idea</span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 20 7v5c0 5-3.4 7.8-8 9-4.6-1.2-8-4-8-9V7l8-4Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>Work it out as we go</span>
+          </div>
+        </div>
+        <div class="hero-visual reveal delay-2">
+          <div class="hero-image-wrap">
+            <img class="hero-image" src="https://images.unsplash.com/photo-1631556097152-c39479bbff31?auto=format&fit=crop&w=1200&q=88" alt="A 3D printer creating a detailed object in a workshop" fetchpriority="high">
+            <div class="image-corner"><span></span> DIGITAL IN. REAL WORLD OUT.</div>
+            <div class="hero-image-caption">
+              <div><strong>Made to be more than an idea.</strong><span>Custom prints, considered from the start.</span></div>
+              <div class="caption-index">LL / 01</div>
+            </div>
+          </div>
+          <div class="floating-note">
+            <div class="floating-note-top"><span>Our approach</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4"/></svg></div>
+            <strong>Sketch first.</strong>
+            <strong class="accent-text">Work it out.</strong>
+            <p>Not every idea starts finished.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Studio highlights">
+      <div class="container trust-grid">
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 4.5 7v10L12 21l7.5-4V7L12 3Z"/><path d="m4.8 7.2 7.2 4 7.2-4M12 11.2V21"/></svg><div><strong>Made to order</strong><span>No one-size-fits-all</span></div></div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5 19.5 4M7 4h12.5v12.5"/><path d="M4 4v3M4 4h3M20 20h-3M20 20v-3"/></svg><div><strong>Custom dimensions</strong><span>Built around the brief</span></div></div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 20 7v5c0 4.5-3 7.5-8 9-5-1.5-8-4.5-8-9V7l8-4Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg><div><strong>Thoughtful choices</strong><span>Material meets purpose</span></div></div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5M12 7v5l3.2 2"/></svg><div><strong>Clear process</strong><span>From brief to print</span></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="container">
+        <div class="work-heading reveal">
+          <div class="section-heading">
+            <span class="eyebrow">Things to try making</span>
+            <h2>A few things we <span class="accent-text">could make.</span></h2>
+            <p>These are examples, not a catalogue. The fun part is working out what your particular idea needs.</p>
+          </div>
+          <a href="#contact" class="text-link">Got a different idea? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+        </div>
+        <div class="project-grid">
+          <a class="project-card reveal" href="#contact" aria-label="Ask about custom creations">
+            <img src="https://images.unsplash.com/photo-1631556097152-c39479bbff31?auto=format&fit=crop&w=1100&q=85" alt="A close-up of a 3D printer making a small object" loading="lazy">
+            <div class="project-topline"><span class="project-tag">01 / Personal</span><span class="project-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="project-content"><h3>Custom creations</h3><p>One-off designs, gifts and personal objects that feel unmistakably yours.</p></div>
+          </a>
+          <a class="project-card reveal delay-1" href="#contact" aria-label="Ask about functional parts">
+            <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1100&q=85" alt="Tools and equipment in a design workshop" loading="lazy">
+            <div class="project-topline"><span class="project-tag">02 / Practical</span><span class="project-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="project-content"><h3>Functional parts</h3><p>Holders, brackets, organisers and problem-solving everyday components.</p></div>
+          </a>
+          <a class="project-card reveal" href="#contact" aria-label="Ask about prototypes">
+            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1100&q=85" alt="A close-up of technical design and prototyping work" loading="lazy">
+            <div class="project-topline"><span class="project-tag">03 / Prototype</span><span class="project-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="project-content"><h3>Early-stage ideas</h3><p>Give a concept a physical form so you can check its shape, fit and feel.</p></div>
+          </a>
+          <a class="project-card reveal delay-1" href="#contact" aria-label="Ask about decor and accessories">
+            <img src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1100&q=85" alt="Minimal interior with carefully arranged home accessories" loading="lazy">
+            <div class="project-topline"><span class="project-tag">04 / Home</span><span class="project-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="project-content"><h3>Objects for your space</h3><p>Desk accessories and decorative pieces made to work with your style.</p></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section maker-section" id="about">
+      <div class="container maker-layout">
+        <div class="maker-paper reveal">
+          <div class="paper-topline"><span>NOTES FROM THE BENCH</span><span>PAGE 01</span></div>
+          <div class="paper-doodle" aria-hidden="true">
+            <svg viewBox="0 0 300 190" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M48 111 149 53l102 58-101 59-102-59Z" stroke-width="2.5"/>
+              <path d="m48 111 1 26 101 59 101-59v-26M150 170v26" stroke-width="2.5"/>
+              <path d="m109 77 101 58M86 90l101 58M133 64l101 58" stroke-width="1.5" stroke-dasharray="4 6" opacity=".65"/>
+              <path d="M27 46c22-17 42-15 58-1M25 42l2 6 7-1M256 43c13 2 19 8 22 18m-7-3 7 3 2-7" stroke-width="2"/>
+              <path d="M225 151c18 2 30 10 35 24m-8-5 8 5 2-9" stroke-width="2"/>
+            </svg>
+          </div>
+          <p class="handwritten">sketch → print → tweak</p>
+          <div class="paper-note">The first version doesn't have to be the final one.</div>
+          <div class="paper-sticker">TRY IT<br>ANYWAY!</div>
+        </div>
+        <div class="maker-copy reveal delay-1">
+          <span class="eyebrow">A little about LayerLab</span>
+          <h2>Made by trying things, <span class="accent-text">not getting them perfect.</span></h2>
+          <p>LayerLab is a small project built around one question: what if you could make the thing you wish already existed?</p>
+          <p>Sometimes that means a useful bracket. Sometimes it’s a weird little desk object. Sometimes the first version doesn't fit and you have to change it. That’s normal. The point is to test an idea, learn something, and make the next version better.</p>
+          <div class="maker-facts">
+            <div><span class="maker-fact-number">01</span><div><strong>Start small</strong><p>A sketch or a rough idea is enough to begin.</p></div></div>
+            <div><span class="maker-fact-number">02</span><div><strong>Try a version</strong><p>A test print can answer questions a screen can't.</p></div></div>
+            <div><span class="maker-fact-number">03</span><div><strong>Change what doesn't work</strong><p>Good projects usually take a few adjustments.</p></div></div>
+          </div>
+          <a href="#contact" class="text-link">Got an idea to try? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section mini-game-section" id="mini-lab">
+      <div class="container mini-game-layout">
+        <div class="mini-game-copy reveal">
+          <span class="eyebrow">A tiny game for your break</span>
+          <h2>Can you clear the <span class="accent-text">bench in time?</span></h2>
+          <p>The parts tray has gone everywhere. Find each piece in the order on the list, dodge the decoys and make it through all three shifts. The later shifts get tighter, so save a little time for the tricky bits.</p>
+          <div class="game-howto">
+            <div class="game-howto-item"><span>01</span><p>Follow the part list from left to right.</p></div>
+            <div class="game-howto-item"><span>02</span><p>Wrong picks cost time. Quick correct picks build a combo.</p></div>
+            <div class="game-howto-item"><span>03</span><p>Finish all three shifts and beat your own record.</p></div>
+          </div>
+          <div class="prototype-stamp"><span></span> Bench Blitz / playable side quest</div>
+          <p class="game-message" id="game-message" role="status" aria-live="polite">The tray is a mess. Start a run, collect the parts in order and see how high you can get the score.</p>
+          <div class="game-copy-actions">
+            <button class="button button-secondary" type="button" id="game-reset">Reset the bench</button>
+            <span class="keyboard-note">Keys <kbd>1</kbd>–<kbd>8</kbd> pick · <kbd>P</kbd> pauses</span>
+          </div>
+        </div>
+
+        <div class="mini-game-card reveal delay-1">
+          <div class="game-header">
+            <div class="game-brand"><span class="game-brand-mark">LL</span> BENCH BLITZ</div>
+            <span class="game-build" id="game-round-label">READY FOR SHIFT</span>
+          </div>
+          <div class="game-stage-track" id="game-stage-track" aria-label="Campaign progress">
+            <span class="game-stage-segment active"></span>
+            <span class="game-stage-segment"></span>
+            <span class="game-stage-segment"></span>
+          </div>
+          <div class="game-hud">
+            <div class="game-stat"><span>Time left</span><strong id="game-time">35</strong></div>
+            <div class="game-stat"><span>Score</span><strong id="game-score">0000</strong></div>
+            <div class="game-stat"><span>Parts</span><strong><span id="parts-found">0</span><span class="game-stat-total" id="game-total">/5</span></strong></div>
+            <div class="game-stat"><span>Personal best</span><strong id="game-best">0000</strong></div>
+          </div>
+          <div class="game-targets-wrap">
+            <div class="game-targets-label"><span>Pick up in this order</span><span id="game-target-status">FIRST SHIFT</span></div>
+            <div class="game-targets" id="game-targets" aria-label="Parts to collect"></div>
+          </div>
+          <div class="game-world" id="game-world">
+            <span class="game-board-label">THE BENCH / <span id="game-board-shift">SHIFT 01</span></span>
+            <span class="game-hint" id="game-hint">READY WHEN YOU ARE</span>
+            <div class="game-parts" id="game-parts-container" aria-label="Clickable parts on the workbench"></div>
+            <div class="game-start-screen" id="game-start-screen">
+              <div class="game-start-content">
+                <div class="game-start-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5 12 4l7 3.5v9L12 20l-7-3.5v-9Z"/><path d="m5.2 7.7 6.8 3.8 6.8-3.8M12 11.5V20"/></svg>
+                </div>
+                <h3 id="game-overlay-title">Ready to tidy up?</h3>
+                <p id="game-overlay-copy">Three shifts, eight possible parts and a slightly chaotic bench. Collect the right pieces before time runs out.</p>
+                <button class="button" type="button" id="game-start">Start the run <span aria-hidden="true">↗</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="game-timer-track" aria-label="Time remaining"><span class="game-timer-fill" id="game-timer-fill"></span></div>
+          <div class="game-control-row">
+            <span class="game-control-note" id="game-control-note">Click a part or use keys 1–8.</span>
+            <div class="game-control-buttons">
+              <button class="game-control-button" id="game-pause" type="button" disabled>Pause <span>Ⅱ</span></button>
+              <button class="game-control-button" id="game-sound" type="button" aria-pressed="false">Sound off <span>♪</span></button>
+            </div>
+          </div>
+          <div class="game-footer"><span>RIGHT PART: <strong>POINTS + COMBO</strong></span><span>WRONG PICK: <strong id="game-penalty">−2 SEC</strong></span></div>
+          <p class="game-footnote">3 shifts · saved on this device · runs <strong id="game-runs">0</strong> · clears <strong id="game-clears">0</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="services">
+      <div class="container services-layout">
+        <div class="services-intro reveal">
+          <div class="section-heading">
+            <span class="eyebrow">What we can try</span>
+            <h2>You don’t need <span class="accent-text">a perfect file.</span></h2>
+            <p>A model is useful, but it isn’t the only place to start. Bring a sketch, a problem, or a rough description of what you want the object to do.</p>
+          </div>
+          <a href="#contact" class="button button-secondary">Talk through your project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="service-list">
+          <article class="service-item reveal"><div class="service-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4.4 7.7 7.6 4.4 7.6-4.4M12 12.1V21"/></svg></div><div><h3>Custom 3D printing</h3><p>Turn a compatible model into a physical object, with print settings selected around the shape and intended use.</p></div><span>01</span></article>
+          <article class="service-item reveal"><div class="service-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20 14.5 9.5M13 5l6 6M4 20l4.5-1.2L19.8 7.5a2.1 2.1 0 0 0-3-3L5.2 16.2 4 20Z"/><path d="m12 7 5 5"/></svg></div><div><h3>Design support</h3><p>Work out dimensions, shapes and practical details with help preparing an idea for a print-ready model.</p></div><span>02</span></article>
+          <article class="service-item reveal"><div class="service-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h8v8H8zM8 2v2M16 2v2M8 20v2M16 20v2M2 8h2M2 16h2M20 8h2M20 16h2"/></svg></div><div><h3>Prototypes and test pieces</h3><p>Make an early version to evaluate the proportions, fit and overall direction before moving further.</p></div><span>03</span></article>
+          <article class="service-item reveal"><div class="service-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z"/><path d="m4.2 7.6 7.8 4.5 7.8-4.5M12 12.1V21M8 5.3l8 4.6"/></svg></div><div><h3>Small-batch production</h3><p>Discuss making multiple copies of a design for a classroom project, event, collection or small run.</p></div><span>04</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="materials">
+      <div class="container">
+        <div class="materials-header reveal">
+          <div class="section-heading">
+            <span class="eyebrow">Picking a plastic</span>
+            <h2>Different jobs need <span class="accent-text">different plastics.</span></h2>
+            <p>Different plastics behave differently. The best starting point depends on how your print will be used, where it will live and how it needs to feel.</p>
+          </div>
+          <div class="material-note-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>Choose for the job, not just the look</div>
+        </div>
+        <div class="material-grid">
+          <article class="material-card reveal"><div class="material-top"><span class="material-code">MATERIAL / 01</span><span class="material-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11Z"/><path d="M9 15c.3 1.2 1.1 1.9 2.4 2.2"/></svg></span></div><h3>PLA</h3><p>A versatile starting point for models, decorative pieces, prototypes and many everyday accessories.</p><span class="material-tag">General-purpose prints</span></article>
+          <article class="material-card reveal delay-1"><div class="material-top"><span class="material-code">MATERIAL / 02</span><span class="material-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 20 7v5c0 4.5-3 7.5-8 9-5-1.5-8-4.5-8-9V7l8-4Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span></div><h3>PETG</h3><p>Often considered for parts that need a tougher, more impact-resistant feel than standard PLA.</p><span class="material-tag">Practical components</span></article>
+          <article class="material-card reveal delay-2"><div class="material-top"><span class="material-code">MATERIAL / 03</span><span class="material-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 8c2.6-3 5.3 3 8 0s5.3 3 8 0M4 13c2.6-3 5.3 3 8 0s5.3 3 8 0M4 18c2.6-3 5.3 3 8 0s5.3 3 8 0"/></svg></span></div><h3>TPU</h3><p>A flexible material for certain bendable designs, grips, bumpers and protective accessories.</p><span class="material-tag">Flexible designs</span></article>
+        </div>
+        <div class="material-disclaimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg><p>Material and colour availability depend on the printer and project. Printed parts are not automatically suitable for food contact, medical use, outdoor exposure or high-temperature applications. We can discuss the intended use before choosing a material.</p></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="process">
+      <div class="container">
+        <div class="section-heading process-heading reveal">
+          <span class="eyebrow">How a project starts</span>
+          <h2>First the idea. <span class="accent-text">Then the layers.</span></h2>
+          <p>It doesn’t have to be complicated. Figure out what you need, choose a sensible way to make it, and adjust the plan if something needs changing.</p>
+        </div>
+        <div class="process-grid">
+          <article class="process-step reveal"><span class="step-number">STEP / 01</span><h3>Share the idea</h3><p>Send a short description, a sketch, dimensions or a model file. A rough starting point is enough to begin the conversation.</p><div class="step-line"></div></article>
+          <article class="process-step reveal delay-1"><span class="step-number">STEP / 02</span><h3>Plan the print</h3><p>Talk through the material, size, design details, estimated cost and a realistic production timeline.</p><div class="step-line"></div></article>
+          <article class="process-step reveal delay-2"><span class="step-number">STEP / 03</span><h3>Make it tangible</h3><p>Once the details are agreed, the model can be printed and prepared for the agreed collection or delivery arrangement.</p><div class="step-line"></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="container faq-layout">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Before you get started</span>
+          <h2>A few things you might be <span class="accent-text">wondering.</span></h2>
+          <p>3D printing has a couple of quirks. Here are the basics before you send an idea over.</p>
+        </div>
+        <div class="faq-list reveal delay-1">
+          <details class="faq-item">
+            <summary>Do I need a finished 3D model?</summary>
+            <p>No. You can start with a sketch, a photo for reference, dimensions, or just a description of what you want the object to do. Whether design help is possible depends on the project.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What kind of file should I send?</summary>
+            <p>If you already have a model, STL and 3MF are common 3D-printing formats. STEP files can also be useful for some design workflows. Mention what you have in the project message rather than sending a file you aren't sure about.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can every design be 3D printed?</summary>
+            <p>Not always as-is. Very thin parts, unsupported overhangs, tiny details and parts under heavy stress may need changes. The shape, size, material and printer all matter.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How much will my print cost?</summary>
+            <p>There isn't one price for every print. Size, material, print time, design work and quantity all affect the cost. Use the quote form to describe the project and discuss the details.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How long does a print take?</summary>
+            <p>It depends on the object's size, shape, print settings and whether a model needs work first. A realistic estimate should come after the project details are known.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is this site a shop?</summary>
+            <p>LayerLab is presented as a small maker project, not an automated store. The form starts an email conversation, and any printing, pricing or delivery arrangements need to be confirmed separately.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-panel reveal">
+          <div><span class="eyebrow">A question is a good start</span><h2>Got a half-finished idea? That’s enough.</h2><p>You don’t need a perfect sketch or all the measurements yet. Start with what you want to make and we can work from there.</p></div>
+          <a href="#contact" class="button">Let's talk about it <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="contact">
+      <div class="container contact-layout">
+        <div class="contact-copy reveal">
+          <div class="section-heading">
+            <span class="eyebrow">Let's get into the details</span>
+            <h2>Tell us what you want to <span class="accent-text">make real.</span></h2>
+            <p>Share a little about your project and what you need it to do. The details help shape a useful first conversation and a more accurate quote.</p>
+          </div>
+          <div class="contact-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg><div><strong>Already have a model?</strong><span>Include the file type, dimensions and any important tolerances in your message.</span></div></div>
+          <div class="contact-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a7 7 0 0 0-7 7c0 5 7 11 7 11s7-6 7-11a7 7 0 0 0-7-7Z"/><circle cx="12" cy="10" r="2.2"/></svg><div><strong>Still figuring it out?</strong><span>Describe the problem you are trying to solve. You do not need a finished design.</span></div></div>
+          <div class="contact-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg><div><strong>Have a material in mind?</strong><span>Tell us how the object will be used, and we can discuss suitable options.</span></div></div>
+          <a class="contact-detail contact-email-link" href="mailto:ryan.agrawal2013@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><div><strong>Prefer email?</strong><span>ryan.agrawal2013@gmail.com</span></div></a>
+        </div>
+        <form class="quote-form reveal delay-1" id="quote-form">
+          <div class="form-topline"><h3>Project brief</h3><span>FORM / 001</span></div>
+          <div class="form-row">
+            <div class="form-group"><label for="name">Your name</label><input type="text" id="name" name="name" placeholder="Name" autocomplete="name" required></div>
+            <div class="form-group"><label for="email">Email address</label><input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="project">What are you making?</label><select id="project" name="project" required><option value="" selected disabled>Select a project type</option><option>Custom creation</option><option>Functional part</option><option>Prototype</option><option>Decor or accessory</option><option>Small batch</option><option>Design support</option><option>Something else</option></select></div>
+            <div class="form-group"><label for="material">Material preference <span>(optional)</span></label><select id="material" name="material"><option value="Not sure yet">Not sure yet</option><option>PLA</option><option>PETG</option><option>TPU</option><option>Other / discuss options</option></select></div>
+          </div>
+          <div class="form-group"><label for="budget">Budget range <span>(optional)</span></label><select id="budget" name="budget"><option value="Not specified">Prefer to discuss</option><option>Under $25</option><option>$25–$75</option><option>$75–$150</option><option>$150+</option></select></div>
+          <div class="form-group"><label for="details">Tell us about your idea</label><textarea id="details" name="details" placeholder="What should it do? Rough dimensions, quantity, deadline or any other useful details..." required></textarea></div>
+          <button type="submit" class="button">Prepare my request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></button>
+          <div class="form-footnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>This form prepares an email in your email app with the details you entered. It does not send anything automatically.</span></div>
+          <div class="form-status" id="form-status" role="status" aria-live="polite">Your email app should open with your project brief ready to send. If it does not, <button class="copy-draft-button" type="button" id="copy-draft">copy the email draft instead</button>.</div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-note"><strong>Quick note:</strong> LayerLab is a small maker project. The examples here show the kinds of things that may be possible, not a promise that every design can be printed. Price, timing, materials and delivery should be agreed before a project starts.</div>
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="#home" aria-label="LayerLab home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.1 12 3.8l8 4.3-8 4.3-8-4.3Z"/><path d="m4 12 8 4.3 8-4.3M4 15.9l8 4.3 8-4.3"/></svg></span><span class="brand-name">Layer<span>Lab.</span></span></a>
+          <p>A small corner of the internet for custom prints, practical fixes, odd little ideas and things worth trying to make.</p>
+          <div class="footer-social"><a class="social-link" href="#contact" aria-label="Email LayerLab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a><a class="social-link" href="#work" aria-label="Explore LayerLab projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h.01M20 15l-5-5L5 20"/></svg></a></div>
+        </div>
+        <div class="footer-column"><h3>Explore</h3><a href="#work">Selected work</a><a href="#services">What we do</a><a href="#materials">Materials</a><a href="#process">The process</a><a href="#about">About this project</a><a href="#faq">FAQs</a></div>
+        <div class="footer-column"><h3>Start here</h3><a href="#contact">Request a quote</a><a href="#contact">Discuss an idea</a><a href="#services">Design support</a><a href="#home">About LayerLab</a></div>
+        <div class="footer-column"><h3>Good to know</h3><a href="#materials">Material guide</a><a href="#process">How it works</a><a href="#contact">Project questions</a></div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="year">2026</span> LayerLab. A small project, one layer at a time.</span><a class="back-top" href="#home">Back to the top <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 6-6 6 6"/></svg></a></div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById("site-header");
+    const menuButton = document.getElementById("menu-toggle");
+    const navLinks = document.getElementById("nav-links");
+    const navItems = navLinks.querySelectorAll("a[href^='#']");
+    const revealItems = document.querySelectorAll(".reveal");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function closeMenu() {
+      navLinks.classList.remove("open");
+      menuButton.setAttribute("aria-expanded", "false");
+      menuButton.setAttribute("aria-label", "Open navigation menu");
+      menuButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+      document.body.classList.remove("menu-open");
+    }
+
+    menuButton.addEventListener("click", function () {
+      const isOpen = navLinks.classList.toggle("open");
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+      menuButton.innerHTML = isOpen
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+      document.body.classList.toggle("menu-open", isOpen);
+    });
+
+    navItems.forEach(function (link) {
+      link.addEventListener("click", function () {
+        closeMenu();
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 780) closeMenu();
+    });
+
+    function updateHeader() {
+      header.classList.toggle("scrolled", window.scrollY > 12);
+    }
+
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+
+    if ("IntersectionObserver" in window && !reducedMotion) {
+      const revealObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
+
+      revealItems.forEach(function (item) {
+        revealObserver.observe(item);
+      });
+    } else {
+      revealItems.forEach(function (item) {
+        item.classList.add("is-visible");
+      });
+    }
+
+    const sections = document.querySelectorAll("main section[id]");
+    if ("IntersectionObserver" in window) {
+      const sectionObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            const target = "#" + entry.target.id;
+            navItems.forEach(function (link) {
+              link.classList.toggle("active", link.getAttribute("href") === target);
+            });
+          }
+        });
+      }, { rootMargin: "-35% 0px -55% 0px" });
+      sections.forEach(function (section) {
+        sectionObserver.observe(section);
+      });
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+
+    const gameStart = document.getElementById("game-start");
+    const gameStartScreen = document.getElementById("game-start-screen");
+    const gameReset = document.getElementById("game-reset");
+    const gamePause = document.getElementById("game-pause");
+    const gameSound = document.getElementById("game-sound");
+    const gameMessage = document.getElementById("game-message");
+    const partsFound = document.getElementById("parts-found");
+    const gameTime = document.getElementById("game-time");
+    const gameScore = document.getElementById("game-score");
+    const gameBest = document.getElementById("game-best");
+    const gameTotal = document.getElementById("game-total");
+    const gameHint = document.getElementById("game-hint");
+    const gameTimerFill = document.getElementById("game-timer-fill");
+    const gamePartsContainer = document.getElementById("game-parts-container");
+    const gameOverlayTitle = document.getElementById("game-overlay-title");
+    const gameOverlayCopy = document.getElementById("game-overlay-copy");
+    const gameTargets = document.getElementById("game-targets");
+    const gameRoundLabel = document.getElementById("game-round-label");
+    const gameBoardShift = document.getElementById("game-board-shift");
+    const gameTargetStatus = document.getElementById("game-target-status");
+    const gameStageTrack = document.getElementById("game-stage-track");
+    const gameControlNote = document.getElementById("game-control-note");
+    const gamePenalty = document.getElementById("game-penalty");
+    const gameRuns = document.getElementById("game-runs");
+    const gameClears = document.getElementById("game-clears");
+    const rounds = [
+      { title: "Warm-up", length: 35, count: 5, penalty: 2 },
+      { title: "Parts rush", length: 32, count: 6, penalty: 3 },
+      { title: "No messing", length: 30, count: 7, penalty: 4 }
+    ];
+    const partData = [
+      { id: "gear", name: "Gear", className: "part-gear", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"><path d="m16 3 8 0 1.6 4.2 3.5 1.5 4-1.1 4 7-3.1 2.8v4l3.1 2.8-4 7-4-1.1-3.5 1.5L24 34h-8l-1.6-4.2-3.5-1.5-4 1.1-4-7 3.1-2.8v-4L2.9 12.8l4-7 4 1.1 3.5-1.5L16 3Z"/><circle cx="20" cy="20" r="5.5"/></svg>' },
+      { id: "bolt", name: "Bolt", className: "part-bolt", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M13 4h14l4 7-4 7H13l-4-7 4-7Z"/><path d="M18 18v15m4-15v15m-4 0h4"/></svg>' },
+      { id: "spring", name: "Spring", className: "part-spring", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h7l-5 6 12 5-12 5 5 6H7m19-22h7v22h-7"/><path d="M26 7 15 13m11 5L15 13m11 5-11 5m11 0L15 23m11 0-11 6"/></svg>' },
+      { id: "nut", name: "Nut", className: "part-nut", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m20 3 15 8.5v17L20 37 5 28.5v-17L20 3Z"/><circle cx="20" cy="20" r="6.5"/></svg>' },
+      { id: "cube", name: "Cube", className: "part-cube", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"><path d="m20 3 15 8.5-15 8.5L5 11.5 20 3Z"/><path d="M5 11.5v17L20 37V20M35 11.5v17L20 37"/></svg>' },
+      { id: "washer", name: "Washer", className: "part-washer", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="6"/></svg>' },
+      { id: "wrench", name: "Wrench", className: "part-wrench", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M25 7a10 10 0 0 0-12 12L5 27a4 4 0 0 0 6 6l8-8A10 10 0 0 0 31 13l-6 6-6-6 6-6Z"/></svg>' },
+      { id: "spool", name: "Spool", className: "part-spool", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"><path d="M8 11 20 5l12 6-12 6-12-6Z"/><path d="M8 11v18l12 6 12-6V11M8 20l12 6 12-6M20 17v18"/></svg>' }
+    ];
+    const partById = Object.fromEntries(partData.map(function (part) { return [part.id, part]; }));
+    const bestScoreKey = "layerlab-benchblitz-best-v1";
+    const soundKey = "layerlab-benchblitz-sound-v1";
+    const runsKey = "layerlab-benchblitz-runs-v1";
+    const clearsKey = "layerlab-benchblitz-clears-v1";
+    let foundParts = 0;
+    let gameStarted = false;
+    let gamePaused = false;
+    let betweenRounds = false;
+    let gameOver = false;
+    let campaignActive = false;
+    let currentRound = 0;
+    let secondsLeft = rounds[0].length;
+    let roundLength = rounds[0].length;
+    let score = 0;
+    let streak = 0;
+    let lastPickAt = 0;
+    let clockId = null;
+    let deadline = 0;
+    let pausedMilliseconds = 0;
+    let nextTargetIndex = 0;
+    let buildOrder = ["gear", "bolt", "spring", "nut", "cube"];
+    let bestScore = readSavedNumber(bestScoreKey, 0);
+    let runsPlayed = readSavedNumber(runsKey, 0);
+    let runsCleared = readSavedNumber(clearsKey, 0);
+    let soundEnabled = readSavedNumber(soundKey, 0) === 1;
+    let audioContext = null;
+
+    function readSavedNumber(key, fallback) {
+      try {
+        const stored = window.localStorage.getItem(key);
+        const value = Number(stored);
+        return stored !== null && Number.isFinite(value) ? value : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function shuffle(items) {
+      const result = items.slice();
+      for (let i = result.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+      return result;
+    }
+
+    function saveBestScore() {
+      if (score > bestScore) {
+        bestScore = score;
+        try {
+          window.localStorage.setItem(bestScoreKey, String(bestScore));
+        } catch (error) {}
+      }
+      gameBest.textContent = String(bestScore).padStart(4, "0");
+    }
+
+    function prepareAudio() {
+      if (audioContext) {
+        if (audioContext.state === "suspended") audioContext.resume().catch(function () {});
+        return audioContext;
+      }
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return null;
+      try {
+        audioContext = new AudioContextClass();
+      } catch (error) {
+        audioContext = null;
+      }
+      return audioContext;
+    }
+
+    function tone(frequency, duration, type, volume, delay) {
+      if (!soundEnabled) return;
+      const context = prepareAudio();
+      if (!context) return;
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const startAt = context.currentTime + (delay || 0);
+      oscillator.type = type || "sine";
+      oscillator.frequency.setValueAtTime(frequency, startAt);
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(volume || 0.045, startAt + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(startAt);
+      oscillator.stop(startAt + duration + 0.02);
+    }
+
+    function playCorrectSound() {
+      tone(530, 0.09, "triangle", 0.035, 0);
+      tone(760, 0.12, "triangle", 0.025, 0.07);
+    }
+
+    function playWrongSound() {
+      tone(175, 0.16, "square", 0.025, 0);
+    }
+
+    function playFinishSound() {
+      tone(523, 0.18, "triangle", 0.035, 0);
+      tone(659, 0.18, "triangle", 0.035, 0.12);
+      tone(784, 0.26, "triangle", 0.04, 0.24);
+    }
+
+    function updateSoundButton() {
+      gameSound.innerHTML = soundEnabled ? 'Sound on <span>♪</span>' : 'Sound off <span>♪</span>';
+      gameSound.setAttribute("aria-pressed", String(soundEnabled));
+    }
+
+    function renderParts() {
+      gamePartsContainer.innerHTML = "";
+      shuffle(partData).forEach(function (part, index) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "game-part " + part.className;
+        button.dataset.part = part.id;
+        button.dataset.keyIndex = String(index + 1);
+        button.setAttribute("aria-label", "Pick up " + part.name + ", keyboard shortcut " + (index + 1));
+        button.innerHTML = '<span class="part-key">' + (index + 1) + "</span>" + part.icon + '<span class="part-name">' + part.name + "</span>";
+        button.disabled = !gameStarted;
+        button.addEventListener("click", function () {
+          pickPart(part, button);
+        });
+        gamePartsContainer.appendChild(button);
+      });
+    }
+
+    function renderTargets() {
+      gameTargets.innerHTML = "";
+      buildOrder.forEach(function (id, index) {
+        const chip = document.createElement("span");
+        chip.className = "target-chip";
+        chip.dataset.target = id;
+        chip.textContent = partById[id].name;
+        if (index < nextTargetIndex) chip.classList.add("done");
+        if (index === nextTargetIndex && gameStarted) chip.classList.add("current");
+        gameTargets.appendChild(chip);
+      });
+    }
+
+    function updateGameHud() {
+      partsFound.textContent = String(foundParts);
+      gameTime.textContent = String(secondsLeft);
+      gameScore.textContent = String(score).padStart(4, "0");
+      gameBest.textContent = String(bestScore).padStart(4, "0");
+      gameRuns.textContent = String(runsPlayed);
+      gameClears.textContent = String(runsCleared);
+      gameTotal.textContent = "/" + buildOrder.length;
+      gameTimerFill.style.width = Math.max(0, Math.min(100, secondsLeft / Math.max(1, roundLength) * 100)) + "%";
+      gameTime.classList.toggle("time-low", secondsLeft <= 8 && gameStarted);
+      gameRoundLabel.textContent = currentRound ? "SHIFT " + currentRound + " / 3" : "READY FOR SHIFT";
+      gameBoardShift.textContent = "SHIFT " + String(Math.max(1, currentRound)).padStart(2, "0");
+      gamePenalty.textContent = "−" + (rounds[Math.max(0, currentRound - 1)] || rounds[0]).penalty + " SEC";
+      gameStageTrack.querySelectorAll(".game-stage-segment").forEach(function (segment, index) {
+        segment.classList.toggle("done", index < currentRound - 1 || (gameOver && currentRound === 3));
+        segment.classList.toggle("active", index === currentRound - 1 && !gameOver);
+      });
+      const activeTarget = buildOrder[nextTargetIndex];
+      gameHint.textContent = gameStarted && activeTarget ? "NEXT: " + partById[activeTarget].name.toUpperCase() : nextTargetIndex >= buildOrder.length && buildOrder.length ? "SHIFT CLEARED!" : gamePaused ? "PAUSED" : "READY WHEN YOU ARE";
+      gameTargetStatus.textContent = gameOver ? "RUN COMPLETE" : betweenRounds ? "SHIFT CLEARED" : gamePaused ? "PAUSED" : "SHIFT " + Math.max(1, currentRound);
+      gameControlNote.textContent = gameStarted ? "Keys 1–8 pick parts · P or Space pauses." : gamePaused ? "Timer stopped. Take your time." : "Click a part or use keys 1–8.";
+      gamePause.disabled = !gameStarted && !gamePaused;
+      gamePause.innerHTML = gamePaused ? 'Resume <span>▶</span>' : 'Pause <span>Ⅱ</span>';
+      gamePause.setAttribute("aria-pressed", String(gamePaused));
+      renderTargets();
+    }
+
+    function stopClock() {
+      if (clockId !== null) {
+        window.clearInterval(clockId);
+        clockId = null;
+      }
+    }
+
+    function setPartsDisabled(disabled) {
+      gamePartsContainer.querySelectorAll(".game-part").forEach(function (part) {
+        part.disabled = disabled || part.classList.contains("collected");
+      });
+    }
+
+    function showOverlay(title, copy, buttonText) {
+      gameOverlayTitle.textContent = title;
+      gameOverlayCopy.textContent = copy;
+      gameStart.textContent = buttonText;
+      gameStartScreen.classList.remove("hidden");
+    }
+
+    function hideOverlay() {
+      gameStartScreen.classList.add("hidden");
+    }
+
+    function tickClock(resetDeadline) {
+      stopClock();
+      if (resetDeadline !== false) deadline = Date.now() + secondsLeft * 1000;
+      clockId = window.setInterval(function () {
+        const remainingMs = Math.max(0, deadline - Date.now());
+        const remainingSeconds = Math.ceil(remainingMs / 1000);
+        if (remainingSeconds !== secondsLeft) {
+          secondsLeft = remainingSeconds;
+          updateGameHud();
+        }
+        gameTimerFill.style.width = Math.max(0, remainingMs / (roundLength * 1000) * 100) + "%";
+        if (remainingMs <= 0) {
+          secondsLeft = 0;
+          updateGameHud();
+          finishRun(false);
+        }
+      }, 100);
+    }
+
+    function startCampaign() {
+      stopClock();
+      campaignActive = true;
+      gameOver = false;
+      gamePaused = false;
+      betweenRounds = false;
+      score = 0;
+      runsPlayed += 1;
+      try { window.localStorage.setItem(runsKey, String(runsPlayed)); } catch (error) {}
+      foundParts = 0;
+      streak = 0;
+      lastPickAt = 0;
+      currentRound = 1;
+      updateGameHud();
+      startRound(1);
+    }
+
+    function startRound(roundNumber) {
+      stopClock();
+      currentRound = roundNumber;
+      const settings = rounds[currentRound - 1];
+      roundLength = settings.length;
+      secondsLeft = settings.length;
+      foundParts = 0;
+      streak = 0;
+      lastPickAt = 0;
+      nextTargetIndex = 0;
+      buildOrder = shuffle(partData.map(function (part) { return part.id; })).slice(0, settings.count);
+      gameStarted = true;
+      gamePaused = false;
+      betweenRounds = false;
+      gameOver = false;
+      campaignActive = true;
+      renderParts();
+      renderTargets();
+      hideOverlay();
+      setPartsDisabled(false);
+      if (currentRound === 1) {
+        gameMessage.textContent = "Shift 1 starts gently: find five parts and ignore the three decoys. Quick correct picks add combo points.";
+      } else if (currentRound === 2) {
+        gameMessage.textContent = "A little quicker now. Six parts, fewer decoys and a bigger penalty for wrong picks.";
+      } else {
+        gameMessage.textContent = "Final shift. Seven parts and only one decoy. Keep your eyes on the list.";
+      }
+      updateGameHud();
+      tickClock();
+    }
+
+    function finishRound() {
+      gameStarted = false;
+      stopClock();
+      setPartsDisabled(true);
+      const timeBonus = secondsLeft * 10;
+      score += timeBonus;
+      playFinishSound();
+      if (currentRound === rounds.length) {
+        finishRun(true);
+        return;
+      }
+      betweenRounds = true;
+      gamePaused = false;
+      gameMessage.textContent = "Shift " + currentRound + " cleared. You picked up a " + timeBonus + " point time bonus. Next shift gets a bit less forgiving.";
+      updateGameHud();
+      showOverlay("Shift " + currentRound + " cleared!", "Nice work. You banked " + timeBonus + " bonus points for finishing with " + secondsLeft + " seconds left. Ready for the next mess?", "Start shift " + (currentRound + 1));
+    }
+
+    function getGrade(value) {
+      if (value >= 3000) return "S";
+      if (value >= 2450) return "A";
+      if (value >= 1900) return "B";
+      if (value >= 1300) return "C";
+      return "D";
+    }
+
+    function finishRun(won) {
+      gameStarted = false;
+      gamePaused = false;
+      betweenRounds = false;
+      gameOver = true;
+      campaignActive = false;
+      stopClock();
+      setPartsDisabled(true);
+      const previousBest = bestScore;
+      saveBestScore();
+      if (won) {
+        runsCleared += 1;
+        try { window.localStorage.setItem(clearsKey, String(runsCleared)); } catch (error) {}
+      }
+      updateGameHud();
+      if (won) {
+        const grade = getGrade(score);
+        const newRecord = score > previousBest;
+        gameMessage.textContent = "All three shifts are done. Final score: " + score + ". Grade " + grade + ". That bench is finally usable again.";
+        showOverlay("Bench officially cleared!", "You finished the full run with " + score + " points and a grade of " + grade + ". " + (newRecord ? "New personal best!" : score === bestScore ? "You matched your best score." : "Think you can beat that next time?"), "Play another run");
+        playFinishSound();
+      } else {
+        const cleared = Math.max(0, currentRound - 1);
+        gameMessage.textContent = "Time ran out in shift " + currentRound + ". You scored " + score + " points and cleared " + cleared + " of the three shifts.";
+        showOverlay("Out of time!", "You made it to shift " + currentRound + " with " + foundParts + " parts collected. Your score is " + score + ". Have another go?", "Try again");
+        playWrongSound();
+      }
+      updateGameHud();
+    }
+
+    function pickPart(part, button) {
+      if (!gameStarted || button.disabled) return;
+      const expected = buildOrder[nextTargetIndex];
+      if (part.id === expected) {
+        const now = Date.now();
+        streak = lastPickAt && now - lastPickAt <= 5000 ? streak + 1 : 1;
+        lastPickAt = now;
+        const comboBonus = Math.min(100, Math.max(0, streak - 1) * 25);
+        const earned = 100 + (currentRound - 1) * 20 + comboBonus;
+        score += earned;
+        foundParts += 1;
+        nextTargetIndex += 1;
+        button.classList.add("collected");
+        button.disabled = true;
+        playCorrectSound();
+        gameMessage.textContent = part.name + " is in. +" + earned + " points" + (streak > 1 ? " for a " + streak + " part streak." : ".") + (nextTargetIndex < buildOrder.length ? " Next up: " + partById[buildOrder[nextTargetIndex]].name + "." : " That is the last part for this shift.");
+        updateGameHud();
+        if (nextTargetIndex === buildOrder.length) finishRound();
+      } else {
+        const penalty = rounds[currentRound - 1].penalty;
+        deadline -= penalty * 1000;
+        secondsLeft = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+        streak = 0;
+        button.classList.remove("wrong");
+        void button.offsetWidth;
+        button.classList.add("wrong");
+        playWrongSound();
+        gameMessage.textContent = part.name + " is not next. You lost " + penalty + " seconds. Look for the " + partById[expected].name + ".";
+        updateGameHud();
+        if (secondsLeft <= 0) finishRun(false);
+      }
+    }
+
+    function pauseGame() {
+      if (!gameStarted) return;
+      pausedMilliseconds = Math.max(0, deadline - Date.now());
+      secondsLeft = Math.ceil(pausedMilliseconds / 1000);
+      stopClock();
+      gameStarted = false;
+      gamePaused = true;
+      setPartsDisabled(true);
+      updateGameHud();
+      gameMessage.textContent = "Shift paused. Grab a drink or plan your next move; the clock is stopped.";
+      showOverlay("Taking five?", "Your remaining time is safe. Pick up where you left off whenever you are ready.", "Resume shift");
+    }
+
+    function resumeGame() {
+      if (!gamePaused) return;
+      deadline = Date.now() + pausedMilliseconds;
+      secondsLeft = Math.ceil(pausedMilliseconds / 1000);
+      gamePaused = false;
+      gameStarted = true;
+      hideOverlay();
+      setPartsDisabled(false);
+      updateGameHud();
+      tickClock(false);
+      gameMessage.textContent = "Back on the bench. The next part is " + partById[buildOrder[nextTargetIndex]].name + ".";
+    }
+
+    function handleGameStart() {
+      if (gamePaused) {
+        resumeGame();
+      } else if (betweenRounds) {
+        startRound(currentRound + 1);
+      } else {
+        startCampaign();
+      }
+    }
+
+    function resetGame() {
+      stopClock();
+      foundParts = 0;
+      gameStarted = false;
+      gamePaused = false;
+      betweenRounds = false;
+      gameOver = false;
+      campaignActive = false;
+      currentRound = 0;
+      secondsLeft = rounds[0].length;
+      roundLength = rounds[0].length;
+      score = 0;
+      streak = 0;
+      lastPickAt = 0;
+      nextTargetIndex = 0;
+      pausedMilliseconds = 0;
+      buildOrder = ["gear", "bolt", "spring", "nut", "cube"];
+      renderParts();
+      renderTargets();
+      setPartsDisabled(true);
+      gameMessage.textContent = "The tray is a mess. Start a run, collect the parts in order and see how high you can get the score.";
+      updateGameHud();
+      showOverlay("Ready to tidy up?", "Three shifts, eight possible parts and a slightly chaotic bench. Collect the right pieces before time runs out.", "Start the run");
+    }
+
+    gameStart.addEventListener("click", handleGameStart);
+    gameReset.addEventListener("click", resetGame);
+    gamePause.addEventListener("click", function () {
+      if (gameStarted) pauseGame();
+      else if (gamePaused) resumeGame();
+    });
+    gameSound.addEventListener("click", function () {
+      soundEnabled = !soundEnabled;
+      try {
+        window.localStorage.setItem(soundKey, soundEnabled ? "1" : "0");
+      } catch (error) {}
+      updateSoundButton();
+      if (soundEnabled) {
+        prepareAudio();
+        tone(660, 0.1, "triangle", 0.035, 0);
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      const focused = event.target;
+      const inField = focused && (focused.matches("input, textarea, select") || focused.isContentEditable);
+      if (inField) return;
+      if (/^[1-8]$/.test(event.key) && gameStarted) {
+        event.preventDefault();
+        const button = gamePartsContainer.querySelector('[data-key-index="' + event.key + '"]');
+        if (button && !button.disabled) button.click();
+      } else if ((event.key.toLowerCase() === "p" || event.code === "Space") && (gameStarted || gamePaused)) {
+        event.preventDefault();
+        if (gameStarted) pauseGame();
+        else resumeGame();
+      } else if (event.key === "Escape" && gameStarted) {
+        pauseGame();
+      }
+    });
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden && gameStarted) pauseGame();
+    });
+
+    updateSoundButton();
+    resetGame();
+
+
+    let currentEmailDraft = "";
+
+    document.getElementById("copy-draft").addEventListener("click", async function () {
+      const button = this;
+      const text = currentEmailDraft;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = "Draft copied";
+      } catch (error) {
+        const helper = document.createElement("textarea");
+        helper.value = text;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.opacity = "0";
+        document.body.appendChild(helper);
+        helper.select();
+        let copied = false;
+        try { copied = document.execCommand("copy"); } catch (copyError) { copied = false; }
+        helper.remove();
+        button.textContent = copied ? "Draft copied" : "Select and copy your details from the form";
+      }
+    });
+
+    document.getElementById("quote-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      if (!form.reportValidity()) return;
+
+      const formData = new FormData(form);
+      const name = String(formData.get("name") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const project = String(formData.get("project") || "").trim();
+      const material = String(formData.get("material") || "Not sure yet").trim();
+      const budget = String(formData.get("budget") || "Not specified").trim();
+      const details = String(formData.get("details") || "").trim();
+      const subject = "LayerLab project enquiry: " + project;
+      const message = [
+        "Hello LayerLab,",
+        "",
+        "I'd like to ask about a project.",
+        "",
+        "Name: " + name,
+        "Email: " + email,
+        "Project type: " + project,
+        "Material preference: " + material,
+        "Budget range: " + budget,
+        "",
+        "Project details:",
+        details,
+        "",
+        "Thanks!"
+      ].join("\n");
+      const mailto = "mailto:ryan.agrawal2013@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message);
+      currentEmailDraft = "To: ryan.agrawal2013@gmail.com\nSubject: " + subject + "\n\n" + message;
+      const copyButton = document.getElementById("copy-draft");
+      copyButton.textContent = "copy the email draft instead";
+      const status = document.getElementById("form-status");
+      status.classList.add("visible");
+      window.location.href = mailto;
+    });
+  </script>
+</body>
+</html>
